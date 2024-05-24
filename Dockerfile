@@ -2,7 +2,7 @@ FROM node:lts-alpine AS build
 
 WORKDIR /app
 
-COPY ["package.json", "./"]
+COPY package.json .
 
 RUN yarn install --no-lockfile
 
@@ -13,8 +13,6 @@ CMD [ "yarn", "build" ]
 
 FROM nginx:stable-alpine
 
-COPY --from=build app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
